@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Araç Takip</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🚗 Araç Takip</div>
+    <div class="summary" id="summary"></div>
+    <div class="conn" id="conn" title="Canlı bağlantı durumu">● Bağlanıyor…</div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <nav class="tabs">
+        <button class="tab active" data-tab="vehicles">Araçlar</button>
+        <button class="tab" data-tab="alerts">Alarmlar <span class="badge" id="alertBadge" hidden>0</span></button>
+        <button class="tab" data-tab="geofences">Bölgeler</button>
+      </nav>
+
+      <!-- Araçlar -->
+      <section class="panel" id="tab-vehicles">
+        <div class="row">
+          <input id="search" type="search" placeholder="Plaka veya sürücü ara…" />
+          <button class="btn primary" id="addVehicleBtn">+ Araç</button>
+        </div>
+        <ul class="list" id="vehicleList"></ul>
+      </section>
+
+      <!-- Alarmlar -->
+      <section class="panel" id="tab-alerts" hidden>
+        <ul class="list" id="alertList"></ul>
+      </section>
+
+      <!-- Bölgeler -->
+      <section class="panel" id="tab-geofences" hidden>
+        <p class="hint">Yeni bölge eklemek için butona basıp haritada bir noktaya tıklayın.</p>
+        <button class="btn primary" id="addFenceBtn">+ Bölge ekle</button>
+        <ul class="list" id="fenceList"></ul>
+      </section>
+    </aside>
+
+    <section class="mapwrap">
+      <div id="map"></div>
+
+      <!-- Araç detay paneli -->
+      <div class="detail" id="detail" hidden>
+        <div class="detail-head">
+          <h2 id="dTitle"></h2>
+          <button class="icon" id="dClose" aria-label="Kapat">✕</button>
+        </div>
+        <div class="detail-body">
+          <dl class="kv" id="dInfo"></dl>
+
+          <h3>Rota geçmişi</h3>
+          <div class="row">
+            <label>Başlangıç<input type="datetime-local" id="hFrom" /></label>
+            <label>Bitiş (boş = şimdi)<input type="datetime-local" id="hTo" /></label>
+          </div>
+          <div class="row">
+            <button class="btn" id="hShow">Rotayı göster</button>
+            <button class="btn" id="hPlay">▶ Oynat</button>
+            <button class="btn" id="hClear">Temizle</button>
+          </div>
+          <div class="stats" id="hStats"></div>
+
+          <h3>Ayarlar</h3>
+          <form id="editForm" class="form">
+            <label>Sürücü<input name="driver" /></label>
+            <label>Model<input name="model" /></label>
+            <label>Hız limiti (km/s)<input name="speedLimit" type="number" min="1" max="300" /></label>
+            <label>Renk<input name="color" type="color" /></label>
+            <div class="row">
+              <button class="btn primary" type="submit">Kaydet</button>
+              <button class="btn" type="button" id="dToken">Cihaz anahtarı</button>
+              <button class="btn danger" type="button" id="dDelete">Sil</button>
+            </div>
+          </form>
+          <pre class="token" id="dTokenBox" hidden></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Araç ekleme penceresi -->
+  <dialog id="vehicleDialog">
+    <form method="dialog" id="vehicleForm" class="form">
+      <h2>Yeni araç</h2>
+      <label>Plaka *<input name="plate" required maxlength="20" placeholder="34 ABC 123" /></label>
+      <label>Sürücü<input name="driver" /></label>
+      <label>Model<input name="model" /></label>
+      <label>Hız limiti (km/s)<input name="speedLimit" type="number" min="1" max="300" value="90" /></label>
+      <label>Renk<input name="color" type="color" value="#2563eb" /></label>
+      <p class="error" id="vehicleError"></p>
+      <div class="row">
+        <button class="btn" value="cancel" formnovalidate>Vazgeç</button>
+        <button class="btn primary" value="ok">Ekle</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toasts" id="toasts"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

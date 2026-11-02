@@ -1,0 +1,14 @@
+{
+  "name": "arac-takip",
+  "version": "1.0.0",
+  "description": "Araçlar için gerçek zamanlı GPS takip yazılımı",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "SIMULATE=1 node src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}
